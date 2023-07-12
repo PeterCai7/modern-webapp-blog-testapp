@@ -17,7 +17,7 @@ import jakarta.ws.rs.core.Response;
 
 import java.util.UUID;
 
-@Path("/posts")
+@Path("/")
 @RequestScoped
 public class PostsResource {
 

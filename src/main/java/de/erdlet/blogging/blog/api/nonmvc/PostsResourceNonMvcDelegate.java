@@ -33,7 +33,7 @@ public class PostsResourceNonMvcDelegate {
 
 	public Response handleCreate(final JsonPostDTO dto) {
 		final var post = postService.create(dto.getTitle(), dto.getContent());
-		final var location = URI.create("/posts/" + post.getId());
+		final var location = URI.create("/" + post.getId());
 
 		return Response.created(location).build();
 	}
@@ -41,7 +41,7 @@ public class PostsResourceNonMvcDelegate {
 	public Response handleUpdate(final UUID id, final @Valid JsonPostDTO form) {
 		final var post = postService.update(id, form.getTitle(), form.getContent());
 
-		return post.map(p -> Response.noContent().location(URI.create("/posts/" + id)).build())
+		return post.map(p -> Response.noContent().location(URI.create("/" + id)).build())
 				.orElseGet(() -> Response.status(Response.Status.NOT_FOUND).build());
 	}
 

@@ -71,9 +71,9 @@ public class PostsResourceMvcDelegate {
 		}
 
 		final var post = postService.create(form.getTitle(), form.getContent());
-		final var location = URI.create("/posts/" + post.getId());
+		final var location = URI.create("/" + post.getId());
 
-		return Response.created(location).entity("redirect:/posts/" + post.getId()).build();
+		return Response.created(location).entity("redirect:/" + post.getId()).build();
 	}
 
 	public Response handleEdit(final UUID id) {
@@ -97,14 +97,14 @@ public class PostsResourceMvcDelegate {
 
 		final var post = postService.update(id, form.getTitle(), form.getContent());
 
-		return post.map(p -> Response.ok("redirect:/posts/" + id).build())
+		return post.map(p -> Response.ok("redirect:/" + id).build())
 				.orElseGet(() -> Response.status(Response.Status.NOT_FOUND).entity("404.jsp").build());
 	}
 
 	public Response handleDelete(final UUID id) {
 		postService.delete(id);
 
-		return Response.ok("redirect:/posts").build();
+		return Response.ok("redirect:/").build();
 	}
 
 	public Response handleCreateComment(final UUID postId, final CommentForm form) {
@@ -112,7 +112,7 @@ public class PostsResourceMvcDelegate {
 			commentFormErrors.setAuthorErrors(bindingResult.getErrors("author"));
 			commentFormErrors.setContentErrors(bindingResult.getErrors("content"));
 
-			return Response.status(Response.Status.BAD_REQUEST).entity("redirect:/posts/" + postId).build();
+			return Response.status(Response.Status.BAD_REQUEST).entity("redirect:/" + postId).build();
 		}
 
 		final var commentId = commentService.createInPost(postId, form.getAuthor(), form.getContent());
@@ -122,7 +122,7 @@ public class PostsResourceMvcDelegate {
 			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("post.jsp").build();
 		} else {
 			return Response.created(URI.create(postId + "/comments/" + commentId))
-					.entity("redirect:/posts/" + postId).build();
+					.entity("redirect:/" + postId).build();
 		}
 	}
 }
